@@ -1,0 +1,7 @@
+{
+  "name": "typescript-experiments",
+  "packageManager": "yarn@4.0.0-rc.51",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
