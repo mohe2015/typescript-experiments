@@ -9,19 +9,25 @@ const data: {
 }
 
 type RecordMap = typeof data
-type UnionRecordBoth<K extends keyof RecordMap = keyof RecordMap> = { [P in K]: [UnionRecord0<P>, UnionRecord1<P>] }[K];
-type UnionRecord<K extends keyof RecordMap = keyof RecordMap> = { [P in K]: RecordMap[P] }[K];
-type UnionRecord0<K extends keyof RecordMap = keyof RecordMap> = { [P in K]: RecordMap[P]["0"] }[K];
-type UnionRecord1<K extends keyof RecordMap = keyof RecordMap> = { [P in K]: RecordMap[P]["1"] }[K];
+type UnionRecordBoth<K extends keyof RecordMap> = { [P in keyof RecordMap]: [UnionRecord<P>["0"], UnionRecord<P>["1"]] }[K];
+type UnionRecord<K extends keyof RecordMap> = { [P in keyof RecordMap]: RecordMap[P] }[K];
 
-function magic<P extends keyof typeof data>(input: RecordMap[P]) {
-    // you can see that this is wrong, but why?
-    const aboth: UnionRecordBoth<P> = ["hi", 1];
-    const a: UnionRecord<P> = ["hi", 1];
+type test = ["hi", 1] | [2, "jo"]
+type JO = UnionRecordBoth<"a"|"b">
+type JOa = UnionRecordBoth<"a">
+type JOb = UnionRecordBoth<"b">
+type JOc<C extends keyof typeof data> = UnionRecordBoth<C>
 
-    const a0: UnionRecord0<P> = "hi";
-    const a1: UnionRecord1<P> = 1;
-
-    const ba: UnionRecord<P> = [a0, a1];
-    const baboth: UnionRecordBoth<P> = [a0, a1];
+let a: JOc<"a"|"b"> = [] as any
+if (a[0] === "hi") {
+    let type = a[1]
 }
+
+function magic<P extends keyof typeof data>(input: UnionRecord<P>): UnionRecord<P> {
+    // you can see that this is wrong, but why?
+    const aboth: UnionRecordBoth<P> = input;
+    const wfwef: UnionRecord<P> = aboth;
+    return wfwef
+}
+
+magic<"b">([2, "jo"])
